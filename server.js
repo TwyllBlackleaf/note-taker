@@ -22,6 +22,16 @@ function validateNote(note) {
     return true;
 }
 
+function createNote(body, noteArray) {
+    noteArray.push(body);
+    fs.writeFileSync(
+        path.join(__dirname, "./db/db.json"),
+        JSON.stringify(noteArray, null, 2)
+    );
+
+    return body;
+}
+
 app.get("/notes", (req, res) => {
     res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
@@ -36,10 +46,9 @@ app.post("/api/notes", (req, res) => {
     if (!validateNote(req.body)) {
         res.status(400).send("Please include a title and text in your note.");
     } else {
-        res.json(req.body);
+        const note = createNote(req.body, notes);
+        res.json(note);
     }
-
-
 })
 
 app.get("*", (req, res) => {
