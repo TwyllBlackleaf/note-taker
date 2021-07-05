@@ -1,7 +1,7 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-const notes = require(path.join(__dirname, "/db/db.json"));
+var notes = require(path.join(__dirname, "/db/db.json"));
 const { nanoid } = require("nanoid");
 
 const PORT = process.env.PORT || 3001;
@@ -49,6 +49,32 @@ app.post("/api/notes", (req, res) => {
         const note = createNote(req.body, notes);
         res.json(note);
     }
+})
+
+app.delete("/api/notes/:id", (req, res) => {
+    var tempArray = [];
+    var idMatched = false;
+
+    notes.forEach(note => {
+        if (req.params.id === note.id) {
+            idMatched = true;
+        } else if (req.params.id !== note.id) {
+            tempArray.push(note);
+        }
+    });
+
+    if (!idMatched) {
+        res.status(400).send("Note could not be found.");
+    }
+
+    notes = tempArray;
+
+    fs.writeFileSync(
+        path.join(__dirname, "./db/db.json"),
+        JSON.stringify(notes, null, 2)
+    );
+
+    res.json(notes);
 })
 
 app.get("*", (req, res) => {
