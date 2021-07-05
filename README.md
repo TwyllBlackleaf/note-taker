@@ -20,6 +20,7 @@ A note-taking app using Express.js and Heroku to save notes with a server.
 - Click on saved notes on the left to view them.
 - To create a new note, click on the plus icon in the top right.
 - To save a note, click the save icon in the top right.
+    * Note: The save icon only appears once the note has text in both the title and body areas.
 - To delete a note, click on the trash can icon next to it in the note list on the left.
 
 ## About the Author
